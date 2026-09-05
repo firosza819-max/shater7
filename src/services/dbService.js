@@ -3,7 +3,11 @@
 
 import { storage } from './storage';
 
-
+// ---------- API ENDPOINTS ----------
+const BASE_URL = 'https://shater7.vercel.app';
+const API_ENDPOINT = `${BASE_URL}/api/productsController.js`;
+const INVOICES_API_ENDPOINT = `${BASE_URL}/api/invoicesController.js`;
+const DELETE_API_ENDPOINT = `${BASE_URL}/api/deleteController.js`;
 
 // ---------- AUTH HELPER ----------
 export function getAuthHeaders() {

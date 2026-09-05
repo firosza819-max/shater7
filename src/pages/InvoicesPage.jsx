@@ -645,15 +645,15 @@ export function InvoicesPage() {
                     wordSpacing: 'normal'
                   }}
                 >
-                  {/* كلمة شاطر والشعار في أعلى التقرير قبل عنوان كشف الحساب */}
-                  <div className="mb-4 text-center sm:text-right border-b border-gray-100 pb-3">
+                  {/* كلمة شاطر والشعار مع مراعاة وجود تباعد وهامش سفلي مناسب لإظهار الكلمة والنص بوضوح */}
+                  <div className="mb-8 text-center sm:text-right border-b border-gray-200 pb-4">
                     <h1 
-                      className="text-3xl font-black text-emerald-800 tracking-normal leading-tight"
+                      className="text-4xl font-black text-emerald-800 leading-normal mb-2"
                       style={{ letterSpacing: 'normal', display: 'block' }}
                     >
                       شاطر
                     </h1>
-                    <p className="text-xs text-emerald-700 font-semibold">نظام إدارة الفواتير والمبيعات</p>
+                    <p className="text-xs text-emerald-700 font-semibold pt-1">نظام إدارة الفواتير والمبيعات</p>
                   </div>
 
                   {/* الهيدر الأنيق الحاوي لعنوان التقرير والتاريخ */}
@@ -730,12 +730,12 @@ export function InvoicesPage() {
                 ) : (
                   <>
                     <Share2 className="w-4 h-4" />
-                    <Download className="w-4 h-4" />
+                    مشاركة / حفظ PDF
                   </>
                 )}
-                تحميل / مشاركة PDF
               </button>
             </div>
+
           </div>
         </div>
       )}

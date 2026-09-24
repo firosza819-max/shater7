@@ -14,16 +14,9 @@ export function PwaInstallBar() {
   const [isInstalled, setIsInstalled] = useState(false);
   const [isDismissed, setIsDismissed] = useState(false);
   const [isInstalling, setIsInstalling] = useState(false);
-  const [isDesktop, setIsDesktop] = useState(() =>
-    typeof window !== 'undefined' && window.matchMedia('(min-width: 768px)').matches
-  );
   const [showInstallHelp, setShowInstallHelp] = useState(false);
 
   useEffect(() => {
-    // لا نستخدم pointer: fine لأن بعض أجهزة الكمبيوتر والشاشات اللمسية
-    // قد تُعرّف المؤشر كـ coarse رغم أنها بيئة Desktop كاملة.
-    const desktopQuery = window.matchMedia('(min-width: 768px)');
-    const updateDesktop = () => setIsDesktop(desktopQuery.matches);
     const updateInstalled = () => setIsInstalled(isStandalone());
     const handleBeforeInstallPrompt = (event) => {
       event.preventDefault();
@@ -35,14 +28,11 @@ export function PwaInstallBar() {
       setInstallPrompt(null);
     };
 
-    updateDesktop();
     updateInstalled();
-    desktopQuery.addEventListener('change', updateDesktop);
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
     window.addEventListener('appinstalled', handleAppInstalled);
 
     return () => {
-      desktopQuery.removeEventListener('change', updateDesktop);
       window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
       window.removeEventListener('appinstalled', handleAppInstalled);
     };
@@ -63,11 +53,11 @@ export function PwaInstallBar() {
     setIsInstalling(false);
   };
 
-  if (isInstalled || isDismissed || !isDesktop) return null;
+  if (isInstalled || isDismissed) return null;
 
   return (
     <aside
-      className="fixed inset-x-0 bottom-0 z-[100] px-4 pb-4 md:px-8"
+      className="fixed inset-x-0 bottom-0 z-[100] w-full px-4 pb-4 md:px-8"
       role="region"
       aria-label="تثبيت تطبيق شاطر"
     >

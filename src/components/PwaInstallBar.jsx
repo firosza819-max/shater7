@@ -14,15 +14,21 @@ export function PwaInstallBar() {
   const [isInstalled, setIsInstalled] = useState(false);
   const [isDismissed, setIsDismissed] = useState(false);
   const [isInstalling, setIsInstalling] = useState(false);
-  const [isDesktop, setIsDesktop] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(() =>
+    typeof window !== 'undefined' && window.matchMedia('(min-width: 768px)').matches
+  );
+  const [showInstallHelp, setShowInstallHelp] = useState(false);
 
   useEffect(() => {
-    const desktopQuery = window.matchMedia('(min-width: 768px) and (pointer: fine)');
+    // لا نستخدم pointer: fine لأن بعض أجهزة الكمبيوتر والشاشات اللمسية
+    // قد تُعرّف المؤشر كـ coarse رغم أنها بيئة Desktop كاملة.
+    const desktopQuery = window.matchMedia('(min-width: 768px)');
     const updateDesktop = () => setIsDesktop(desktopQuery.matches);
     const updateInstalled = () => setIsInstalled(isStandalone());
     const handleBeforeInstallPrompt = (event) => {
       event.preventDefault();
       setInstallPrompt(event);
+      setShowInstallHelp(false);
     };
     const handleAppInstalled = () => {
       setIsInstalled(true);
@@ -43,7 +49,11 @@ export function PwaInstallBar() {
   }, []);
 
   const handleInstall = async () => {
-    if (!installPrompt || isInstalling) return;
+    if (isInstalling) return;
+    if (!installPrompt) {
+      setShowInstallHelp(true);
+      return;
+    }
 
     setIsInstalling(true);
     installPrompt.prompt();
@@ -74,9 +84,9 @@ export function PwaInstallBar() {
         <button
           type="button"
           onClick={handleInstall}
-          disabled={!installPrompt || isInstalling}
-          title={!installPrompt ? 'التثبيت متاح من Chrome أو Edge بعد اكتمال تحميل الصفحة' : undefined}
-          className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-indigo-500 px-4 py-3 text-sm font-bold text-white transition hover:bg-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:ring-offset-2 focus:ring-offset-slate-950 disabled:cursor-not-allowed disabled:bg-slate-700 disabled:text-slate-400 sm:px-5"
+          disabled={isInstalling}
+          title="تثبيت التطبيق على الكمبيوتر"
+          className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-indigo-500 px-4 py-3 text-sm font-bold text-white transition hover:bg-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:ring-offset-2 focus:ring-offset-slate-950 disabled:cursor-wait disabled:opacity-70 sm:px-5"
         >
           <Download size={18} aria-hidden="true" />
           <span>{isInstalling ? 'جارٍ التثبيت...' : 'تثبيت التطبيق على الكمبيوتر'}</span>
@@ -90,6 +100,11 @@ export function PwaInstallBar() {
           <X size={19} aria-hidden="true" />
         </button>
       </div>
+      {showInstallHelp && (
+        <p className="mx-auto mt-2 max-w-5xl rounded-lg bg-amber-50 px-4 py-2 text-center text-xs font-medium text-amber-900 shadow dark:bg-amber-950 dark:text-amber-100">
+          لا يدعم هذا المتصفح نافذة التثبيت الفورية حاليًا. استخدم Chrome أو Edge، ثم افتح قائمة المتصفح واختر «تثبيت شاطر».
+        </p>
+      )}
     </aside>
   );
 }

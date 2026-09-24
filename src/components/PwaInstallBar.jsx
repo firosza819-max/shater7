@@ -10,6 +10,7 @@ const isStandalone = () =>
  * يعتمد على beforeinstallprompt في Chrome وEdge، ويخفي نفسه بعد التثبيت.
  */
 export function PwaInstallBar() {
+  const isAndroid = typeof navigator !== 'undefined' && /Android/i.test(navigator.userAgent);
   const [installPrompt, setInstallPrompt] = useState(null);
   const [isInstalled, setIsInstalled] = useState(false);
   const [isDismissed, setIsDismissed] = useState(false);
@@ -53,7 +54,7 @@ export function PwaInstallBar() {
     setIsInstalling(false);
   };
 
-  if (isInstalled || isDismissed) return null;
+  if (isAndroid || isInstalled || isDismissed) return null;
 
   return (
     <aside

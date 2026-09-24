@@ -8,6 +8,7 @@ import { SalesPage } from '@/pages/SalesPage';
 import { InventoryPage } from '@/pages/InventoryPage';
 import { InvoicesPage } from '@/pages/InvoicesPage';
 import { LauncherPage } from '@/pages/LauncherPage';
+import { PwaInstallBar } from '@/components/PwaInstallBar';
 
 export default function App() {
   return (
@@ -59,6 +60,7 @@ export default function App() {
             />
             <Route path="*" element={<Navigate to="/home" replace />} />
           </Routes>
+          <PwaInstallBar />
         </BrowserRouter>
       </ToastProvider>
     </ThemeProvider>

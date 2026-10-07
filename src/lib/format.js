@@ -67,7 +67,7 @@ export function formatDateShort(value) {
   try {
     return new Intl.DateTimeFormat('ar-EG', {
       year: 'numeric',
-      month: '2-digit',
+      month: 'long',
       day: '2-digit',
     }).format(new Date(value));
   } catch {

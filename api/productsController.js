@@ -65,6 +65,41 @@ export const createProduct = async (req, res) => {
   }
 };
 
+// ---------- 1.1 تحديث منتج موجود في المخزن ----------
+export const updateProduct = async (req, res) => {
+  const { id, sku, name, cost_price, selling_price, category, low_stock_threshold, quantity } = req.body || {};
+
+  if (!id) return res.status(400).json({ message: 'معرف المنتج مطلوب' });
+  if (!name || !name.trim()) return res.status(400).json({ message: 'اسم المنتج مطلوب' });
+
+  try {
+    const query = `
+      UPDATE products
+      SET sku = $1, name = $2, quantity = $3, cost_price = $4,
+          selling_price = $5, category = $6, low_stock_threshold = $7,
+          updated_at = NOW()
+      WHERE id = $8
+      RETURNING *;
+    `;
+    const values = [
+      sku && sku.trim() ? sku.trim() : 'SKU-' + Date.now(),
+      name.trim(),
+      Number(quantity) || 0,
+      Number(cost_price) || 0,
+      Number(selling_price) || 0,
+      category && category.trim() ? category.trim() : 'عام',
+      Number(low_stock_threshold) || 5,
+      id,
+    ];
+    const result = await pool.query(query, values);
+    if (result.rowCount === 0) return res.status(404).json({ message: 'المنتج غير موجود' });
+    return res.status(200).json({ message: 'تم تحديث المنتج بنجاح', product: result.rows[0] });
+  } catch (error) {
+    if (error.code === '23505') return res.status(400).json({ message: 'رمز المنتج (SKU) مستخدم بالفعل' });
+    return res.status(500).json({ error: error.message });
+  }
+};
+
 // ---------- 2. جلب المنتجات ----------
 export const getProducts = async (req, res) => {
   try {
@@ -238,6 +273,8 @@ export default async function handler(req, res) {
   } else if (req.method === 'POST') {
     if (req.body?.items) {
       return await processInvoice(req, res, user);
+    } else if (req.body?.id) {
+      return await updateProduct(req, res);
     } else {
       return await createProduct(req, res);
     }

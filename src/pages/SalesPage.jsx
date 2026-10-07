@@ -121,8 +121,14 @@ export function SalesPage() {
         }
         return c.map((x) => (x.product.id === p.id ? { ...x, quantity: x.quantity + 1 } : x));
       }
-      return [...c, { product: p, quantity: 1 }];
+      return [...c, { product: p, quantity: 1, sellingPrice: Number(p.selling_price) > 0 ? Number(p.selling_price) : '' }];
     });
+  }
+
+  function setSellingPrice(productId, value) {
+    setCart((c) => c.map((x) => (
+      x.product.id === productId ? { ...x, sellingPrice: value } : x
+    )));
   }
 
   function setQty(productId, qty) {
@@ -154,7 +160,7 @@ export function SalesPage() {
 
   // ---- POS calculations ----
   const totalItemsCount = cart.reduce((s, l) => s + (Number(l.quantity) || 0), 0); // إجمالي عدد الوحدات المباعة
-  const subtotal = cart.reduce((s, l) => s + (Number(l.quantity) || 0) * Number(l.product.selling_price), 0);
+  const subtotal = cart.reduce((s, l) => s + (Number(l.quantity) || 0) * (Number(l.sellingPrice) || 0), 0);
   const discountAmount = Math.round(subtotal * (discountPct / 100) * 100) / 100;
   const afterDiscount = subtotal - discountAmount;
   const tax = Math.round(afterDiscount * 0.15 * 100) / 100;
@@ -170,6 +176,10 @@ export function SalesPage() {
       toast('السلة فارغة', 'error');
       return;
     }
+    if (cart.some((line) => line.sellingPrice === '' || Number(line.sellingPrice) <= 0)) {
+      toast('يرجى إدخال سعر البيع لكل صنف في السلة', 'error');
+      return;
+    }
     setSubmitting(true);
     setShowSuccess(false);
 
@@ -177,8 +187,8 @@ export function SalesPage() {
       const items = cart.map((l) => ({
         product_id: l.product.id,
         quantity: Number(l.quantity) || 1,
-        unit_price: Number(l.product.selling_price),
-        subtotal: (Number(l.quantity) || 1) * Number(l.product.selling_price),
+        unit_price: Number(l.sellingPrice),
+        subtotal: (Number(l.quantity) || 1) * Number(l.sellingPrice),
       }));
 
       // التأكد من استخلاص وحفظ اسم العميل إذا تم إدخاله وإلا اعتماد الفراغ
@@ -217,8 +227,8 @@ export function SalesPage() {
           invoice_id: invoice.id,
           product_id: l.product.id,
           quantity: Number(l.quantity) || 1,
-          unit_price: Number(l.product.selling_price),
-          subtotal: (Number(l.quantity) || 1) * Number(l.product.selling_price),
+          unit_price: Number(l.sellingPrice),
+          subtotal: (Number(l.quantity) || 1) * Number(l.sellingPrice),
           product_name: l.product.name,
           product_sku: l.product.sku,
         })),
@@ -340,7 +350,7 @@ export function SalesPage() {
                     <div className="font-semibold text-sm leading-tight mb-1 line-clamp-2 h-9">{p.name}</div>
                     <div className="flex items-center justify-between">
                       <span className="font-bold text-indigo-600 dark:text-indigo-400 text-sm">
-                        {formatCurrency(Number(p.selling_price))} {selectedCurrency}
+                        {Number(p.selling_price) > 0 ? `${formatCurrency(Number(p.selling_price))} ${selectedCurrency}` : 'حدد السعر عند البيع'}
                       </span>
                       <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-700 px-1.5 py-0.5 rounded">
                         المتاح: {p.quantity}
@@ -386,8 +396,20 @@ export function SalesPage() {
                   <div className="flex-1 min-w-0">
                     <div className="text-sm font-semibold truncate">{l.product.name}</div>
                     <div className="text-xs text-slate-400">
-                      {formatCurrency(Number(l.product.selling_price))} {selectedCurrency} × {l.quantity || 0} وحدة = <span className="font-bold text-slate-700 dark:text-slate-200">{formatCurrency((Number(l.quantity) || 0) * Number(l.product.selling_price))} {selectedCurrency}</span>
+                      {(Number(l.sellingPrice) > 0 ? `${formatCurrency(Number(l.sellingPrice))} ${selectedCurrency}` : 'بدون سعر محدد')} × {l.quantity || 0} وحدة = <span className="font-bold text-slate-700 dark:text-slate-200">{formatCurrency((Number(l.quantity) || 0) * (Number(l.sellingPrice) || 0))} {selectedCurrency}</span>
                     </div>
+                    <label className="mt-2 flex items-center gap-2 text-xs font-semibold text-slate-600 dark:text-slate-300">
+                      <span>سعر البيع:</span>
+                      <input
+                        type="number"
+                        min="0"
+                        step="0.01"
+                        value={l.sellingPrice}
+                        onChange={(e) => setSellingPrice(l.product.id, e.target.value)}
+                        placeholder="أدخل السعر"
+                        className="input h-8 min-w-0 flex-1 py-1 text-xs text-center"
+                      />
+                    </label>
                   </div>
                   <div className="flex items-center gap-1">
                     <button

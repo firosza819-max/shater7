@@ -5,17 +5,16 @@ import { formatCurrency } from '@/lib/format';
 function formatInvoiceDate(value) {
   try {
     const d = new Date(value);
-    const date = new Intl.DateTimeFormat('en-GB', {
+    const date = new Intl.DateTimeFormat('ar-EG', {
       year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
+      month: 'long',
+      day: 'numeric',
     }).format(d);
-    const time = new Intl.DateTimeFormat('en-GB', {
+    const time = new Intl.DateTimeFormat('ar-EG', {
       hour: '2-digit',
       minute: '2-digit',
-      hour12: true,
     }).format(d);
-    return `${date} ${time}`;
+    return `${date} - ${time}`;
   } catch {
     return value;
   }

@@ -148,7 +148,7 @@ export function InventoryPage() {
                       <td className="py-3 px-3 text-slate-500">{p.category}</td>
                       <td className="py-3 px-3 font-bold">{formatNumber(p.quantity)}</td>
                       <td className="py-3 px-3 text-slate-500">{formatCurrency(Number(p.cost_price))}</td>
-                      <td className="py-3 px-3 font-semibold">{formatCurrency(Number(p.selling_price))}</td>
+                      <td className="py-3 px-3 font-semibold">{Number(p.selling_price) > 0 ? formatCurrency(Number(p.selling_price)) : 'غير محدد'}</td>
                       <td className="py-3 px-3">
                         <span className={`badge ${st.cls}`}><st.icon className="w-3.5 h-3.5" /> {st.label}</span>
                       </td>
@@ -362,12 +362,13 @@ function ProductEditModal({ product, onClose, onSaved }) {
 
               {/* سعر البيع */}
               <div>
-                <label className="block text-[11px] font-semibold text-slate-500 dark:text-slate-400 mb-1">سعر البيع</label>
+                <label className="block text-[11px] font-semibold text-slate-500 dark:text-slate-400 mb-1">سعر البيع <span className="font-normal">(اختياري)</span></label>
                 <input 
                   type="number" 
                   step="0.01" 
                   min="0"
                   className="input text-center font-bold text-emerald-600 dark:text-emerald-400" 
+                  placeholder="يُحدد عند البيع"
                   value={form.selling_price} 
                   onFocus={() => handleFocus('selling_price')}
                   onChange={(e) => handleInputChange('selling_price', e.target.value)} 

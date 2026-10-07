@@ -6,7 +6,8 @@
     { "source": "/purchases", "destination": "/index.html" },
     { "source": "/sales", "destination": "/index.html" },
     { "source": "/inventory", "destination": "/index.html" },
-    { "source": "/invoices", "destination": "/index.html" }
+    { "source": "/invoices", "destination": "/index.html" },
+    { "source": "/(.*)", "destination": "/index.html" }
   ],
   "headers": [
     {

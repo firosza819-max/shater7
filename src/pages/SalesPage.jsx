@@ -395,8 +395,13 @@ export function SalesPage() {
                 >
                   <div className="flex-1 min-w-0">
                     <div className="text-sm font-semibold truncate">{l.product.name}</div>
-                    <div className="text-xs text-slate-400">
-                      {(Number(l.sellingPrice) > 0 ? `${formatCurrency(Number(l.sellingPrice))} ${selectedCurrency}` : 'بدون سعر محدد')} × {l.quantity || 0} وحدة = <span className="font-bold text-slate-700 dark:text-slate-200">{formatCurrency((Number(l.quantity) || 0) * (Number(l.sellingPrice) || 0))} {selectedCurrency}</span>
+                    <div className="mt-1 rounded-lg border border-indigo-100 bg-indigo-50/70 px-2 py-1.5 text-sm font-bold text-indigo-800 dark:border-indigo-900/60 dark:bg-indigo-950/40 dark:text-indigo-200" dir="rtl">
+                      <span className="ml-1">معادلة البيع:</span>
+                      <span>{Number(l.sellingPrice) > 0 ? `${formatCurrency(Number(l.sellingPrice))} ${selectedCurrency}` : 'أدخل السعر'}</span>
+                      <span className="mx-1">×</span>
+                      <span>{l.quantity || 0} وحدة</span>
+                      <span className="mx-1">=</span>
+                      <span className="text-base font-extrabold text-indigo-900 dark:text-white">{formatCurrency((Number(l.quantity) || 0) * (Number(l.sellingPrice) || 0))} {selectedCurrency}</span>
                     </div>
                     <label className="mt-2 flex items-center gap-2 text-xs font-semibold text-slate-600 dark:text-slate-300">
                       <span>سعر البيع:</span>

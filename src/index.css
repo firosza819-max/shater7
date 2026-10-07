@@ -5,10 +5,14 @@
 @layer base {
   html {
     direction: rtl;
+    font-size: 16px;
   }
   body {
     font-family: 'Tajawal', 'Cairo', system-ui, -apple-system, sans-serif;
     @apply bg-slate-50 text-slate-800 antialiased;
+    font-size: 1rem;
+    line-height: 1.6;
+    font-weight: 500;
   }
   .dark body {
     @apply bg-slate-950 text-slate-100;
@@ -35,14 +39,25 @@
     @apply btn text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 px-3 py-2;
   }
   .input {
-    @apply w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-2.5 text-sm outline-none transition-all focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500;
+    @apply w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-2.5 text-base outline-none transition-all focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500;
   }
   .label {
-    @apply block text-sm font-semibold text-slate-600 dark:text-slate-300 mb-1.5;
+    @apply block text-base font-semibold text-slate-600 dark:text-slate-300 mb-1.5;
   }
   .badge {
-    @apply inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold;
+    @apply inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-sm font-semibold;
   }
+}
+
+/* تحسين قابلية القراءة: النصوص المساعدة لا تقل عن 13px تقريبًا */
+.text-xs {
+  font-size: 0.875rem !important;
+  line-height: 1.35rem !important;
+}
+.text-\[10px\],
+.text-\[11px\] {
+  font-size: 0.8125rem !important;
+  line-height: 1.2rem !important;
 }
 
 @keyframes slidein {
@@ -166,7 +181,7 @@
   color: #1e293b;
 }
 .inv-brand-sub {
-  font-size: 11px;
+  font-size: 13px;
   color: #64748b;
 }
 .inv-title-box {
@@ -277,7 +292,7 @@
 }
 .inv-sum-label {
   display: block;
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 700;
   color: #64748b;
   margin-bottom: 4px;
@@ -324,7 +339,7 @@
   color: #334155;
 }
 .inv-footer-left {
-  font-size: 11px;
+  font-size: 13px;
   color: #94a3b8;
 }
 

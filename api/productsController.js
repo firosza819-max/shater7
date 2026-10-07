@@ -158,7 +158,6 @@ export const getInvoices = async (req, res) => {
 export const processInvoice = async (req, res, user) => {
   const { 
     type = 'SALE', 
-    tax_amount = 0, 
     paid_amount = 0,
     invoice_number = null,
     items, 
@@ -183,7 +182,8 @@ export const processInvoice = async (req, res, user) => {
     await client.query('BEGIN');
 
     const subtotalAmount = items.reduce((sum, item) => sum + (Number(item.quantity) * Number(item.unit_price)), 0);
-    const totalAmount = subtotalAmount + Number(tax_amount);
+    const taxAmount = 0;
+    const totalAmount = subtotalAmount;
 
     const invoiceQuery = `
       INSERT INTO invoices (
@@ -204,7 +204,7 @@ export const processInvoice = async (req, res, user) => {
       type, 
       resolvedPartyName,
       subtotalAmount,
-      Number(tax_amount), 
+      taxAmount,
       totalAmount, 
       Number(paid_amount),
       user?.id || null

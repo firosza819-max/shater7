@@ -33,7 +33,6 @@ export function InvoiceModal({ invoice, onClose }) {
   }
 
   const subtotal = invoice.items.reduce((s, i) => s + Number(i.subtotal), 0);
-  const tax = Number(invoice.tax_amount) || 0;
   const isSale = invoice.type === 'SALE';
 
   return (
@@ -92,7 +91,6 @@ export function InvoiceModal({ invoice, onClose }) {
         {/* Totals */}
         <div className="mt-4 space-y-1.5">
           <div className="flex justify-between text-sm"><span className="text-slate-500">المجموع الفرعي</span><span>{formatCurrency(subtotal)}</span></div>
-          {tax > 0 && <div className="flex justify-between text-sm"><span className="text-slate-500">الضريبة</span><span>{formatCurrency(tax)}</span></div>}
           <div className="flex justify-between text-lg font-extrabold border-t-2 border-indigo-600 pt-2">
             <span>الإجمالي</span>
             <span className="text-indigo-600">{formatCurrency(Number(invoice.total_amount))}</span>

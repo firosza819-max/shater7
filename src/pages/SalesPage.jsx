@@ -163,8 +163,7 @@ export function SalesPage() {
   const subtotal = cart.reduce((s, l) => s + (Number(l.quantity) || 0) * (Number(l.sellingPrice) || 0), 0);
   const discountAmount = Math.round(subtotal * (discountPct / 100) * 100) / 100;
   const afterDiscount = subtotal - discountAmount;
-  const tax = Math.round(afterDiscount * 0.15 * 100) / 100;
-  const total = afterDiscount + tax;
+  const total = afterDiscount;
 
   // الحسابات المالية بالنسبة للعميل
   const actualPaid = paidAmount === '' ? total : Number(paidAmount);
@@ -203,7 +202,7 @@ export function SalesPage() {
         items,
         subtotal_amount: subtotal,
         discount_amount: discountAmount,
-        tax_amount: tax,
+        tax_amount: 0,
         total_amount: total,
         paid_amount: actualPaid,
         previous_balance: Number(previousBalance),
@@ -218,7 +217,7 @@ export function SalesPage() {
         ...invoice,
         customer_name: finalCustomerName,
         party_name: finalCustomerName,
-        tax_amount: tax,
+        tax_amount: 0,
         discount_amount: discountAmount,
         total_units_sold: totalItemsCount,
         currency: selectedCurrency,
@@ -518,11 +517,6 @@ export function SalesPage() {
                 <span className="font-semibold">- {formatCurrency(discountAmount)} {selectedCurrency}</span>
               </div>
             )}
-            <div className="flex justify-between">
-              <span className="text-slate-500">الضريبة (15%)</span>
-              <span className="font-semibold">{formatCurrency(tax)} {selectedCurrency}</span>
-            </div>
-
             {/* Paid & Remaining Fields */}
             <div className="pt-2 grid grid-cols-2 gap-2">
               <div>

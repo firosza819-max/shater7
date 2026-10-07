@@ -247,7 +247,7 @@ async function processInvoice(type, data) {
   const paidAmount = Number(data.paid_amount) || 0;
   const previousBalance = Number(data.previous_balance) || 0;
   const notes = data.notes || '';
-  const taxAmount = Number(data.tax_amount) || 0;
+  const taxAmount = 0;
 
   const payload = {
     type,

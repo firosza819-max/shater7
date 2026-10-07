@@ -38,7 +38,6 @@ export const getInvoices = async (req, res) => {
 export const createInvoice = async (req, res, userId = null) => {
   const { 
     type, 
-    tax_amount = 0, 
     paid_amount = 0,
     invoice_number = null,
     items, 
@@ -62,7 +61,8 @@ export const createInvoice = async (req, res, userId = null) => {
 
     // حساب الحسابات الإجمالية
     const subtotalAmount = items.reduce((sum, item) => sum + (Number(item.quantity) * Number(item.unit_price)), 0);
-    const calculatedTotal = subtotalAmount + Number(tax_amount);
+    const taxAmount = 0;
+    const calculatedTotal = subtotalAmount;
 
     // إدراج الفاتورة الأم في جدول invoices
     const invoiceQuery = `
@@ -85,7 +85,7 @@ export const createInvoice = async (req, res, userId = null) => {
       type, 
       resolvedPartyName,
       subtotalAmount,
-      Number(tax_amount), 
+      taxAmount,
       calculatedTotal, 
       Number(paid_amount),
       userId

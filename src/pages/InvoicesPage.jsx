@@ -662,7 +662,7 @@ export function InvoicesPage() {
                       <h2 className="text-lg font-bold text-gray-800 bg-white px-4 py-1.5 rounded border border-emerald-200 shadow-sm inline-block">
                         {pdfModalData.title}
                       </h2>
-                      <p className="text-xs text-gray-600 font-medium mt-1">تاريخ التقرير: {new Date().toLocaleDateString('ar-EG')}</p>
+                      <p className="text-xs text-gray-600 font-medium mt-1">تاريخ التقرير: {formatDateShort(new Date())}</p>
                     </div>
                   </div>
 
